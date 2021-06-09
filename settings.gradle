@@ -1,0 +1,2 @@
+rootProject.name = "DataEntry Assignment"
+include ':app'
