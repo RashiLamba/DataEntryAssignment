@@ -35,8 +35,7 @@
             android:layout_marginTop="16dp"
             android:digits="+#*1234567890"
             android:hint="Contact number"
-            android:inputType="number|textNoSuggestions"
-            android:visibility="gone" />
+            android:inputType="number|textNoSuggestions"/>
 
         <EditText
             android:id="@+id/edit_text_contact_number3"
@@ -45,8 +44,7 @@
             android:layout_marginTop="16dp"
             android:digits="+#*1234567890"
             android:hint="Contact number"
-            android:inputType="number|textNoSuggestions"
-            android:visibility="gone" />
+            android:inputType="number|textNoSuggestions"/>
 
         <TextView
             android:id="@+id/text_view_date_picker"
