@@ -2,7 +2,6 @@ package com.example.dataentryassignment.room;
 
 
 import android.content.Context;
-import android.provider.ContactsContract;
 
 import androidx.room.Room;
 import androidx.room.RoomDatabase;

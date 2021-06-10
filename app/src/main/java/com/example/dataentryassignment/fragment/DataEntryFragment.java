@@ -43,6 +43,8 @@ public class DataEntryFragment extends Fragment {
 
         init(view);
         return view;
+
+//        fragmentViewModel.init();
     }
 
     private void init(View view){
