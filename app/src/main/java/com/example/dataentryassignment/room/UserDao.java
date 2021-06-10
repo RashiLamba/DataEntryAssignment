@@ -24,7 +24,7 @@ public interface UserDao {
 
 
     @Query("select * from userDatabase")
-    Single<List<User>> getAllUser();
+    LiveData<List<User>> getAllUser();
 
 
 //    DataSource.Factory<Integer, User> getAllUser();

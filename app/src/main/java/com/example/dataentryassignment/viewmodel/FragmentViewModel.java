@@ -25,8 +25,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FragmentViewModel extends AndroidViewModel {
 
-      public MutableLiveData<List<User>> userList;
-     LocalRepository localRepository;
+    public MutableLiveData<List<User>> userList;
+    LocalRepository localRepository;
 
 
     public FragmentViewModel(@NonNull @NotNull Application application) {
@@ -37,64 +37,35 @@ public class FragmentViewModel extends AndroidViewModel {
     }
 
 
-
-
-    public void addUser(User user){
-         localRepository.addUser(user)
-                 .subscribeOn(Schedulers.io())
-                 .observeOn(AndroidSchedulers.mainThread())
-                 .subscribe(new CompletableObserver() {
-                     @Override
-                     public void onSubscribe(@NotNull Disposable d) {
-                         Log.d("TAG","Inside onSubscribe of addUser in ViewModel");
-                     }
-
-                     @Override
-                     public void onComplete() {
-                         Log.d("TAG","Inside onComplete of addUser in ViewModel");
-
-                     }
-
-                     @Override
-                     public void onError(@NotNull Throwable e) {
-                         Log.d("TAG","Inside onError of addUser in ViewModel.");
-
-                     }
-                 });
-
-
-    }
-
-    public void getAllUsers(){
-        localRepository.getAllUser()
+    public void addUser(User user) {
+        localRepository.addUser(user)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<User>>() {
+                .subscribe(new CompletableObserver() {
                     @Override
                     public void onSubscribe(@NotNull Disposable d) {
-
+                        Log.d("TAG", "Inside onSubscribe of addUser in ViewModel");
                     }
 
                     @Override
-                    public void onSuccess(@NotNull List<User> users) {
-                        userList.postValue(users);
+                    public void onComplete() {
+                        Log.d("TAG", "Inside onComplete of addUser in ViewModel");
 
                     }
 
                     @Override
                     public void onError(@NotNull Throwable e) {
+                        Log.d("TAG", "Inside onError of addUser in ViewModel.");
 
                     }
                 });
+
+
     }
 
-    public void init() {
+    public LiveData<List<User>> getAllUsers() {
+        return localRepository.getAllUser();
 
-//        userList = new Live<>(localRepository.getAllUser()).build();
-
-//            PagedList.Config config = (new PagedList.Config.Builder()).setEnablePlaceholders(false)
-//                    .setInitialLoadSizeHint(10)
-//                    .setPageSize(10).build();
-//            userList = new LivePagedListBuilder<>(repository.getAllUser(), config).build();
-        }
     }
+}
+

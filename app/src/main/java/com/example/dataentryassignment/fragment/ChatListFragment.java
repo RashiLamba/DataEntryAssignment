@@ -52,24 +52,16 @@ public class ChatListFragment extends Fragment {
     }
 
     private void observeForDbChanges(){
-//        fragmentViewModel.getAllUsers();
-        fragmentViewModel.userList.observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+        fragmentViewModel.getAllUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
             @Override
-            public void onChanged(List<User> users) {
-                chatListRecyclerViewAdaptor.submitList(users);
+            public void onChanged(List<User> userList) {
+                chatListRecyclerViewAdaptor.submitList(userList);
+
             }
         });
 
-
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-        fragmentViewModel.getAllUsers();
-    }
 
     private void init(View view) {
         recyclerViewChatList = view.findViewById(R.id.recycler_view_chat_list);

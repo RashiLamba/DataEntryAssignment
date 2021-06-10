@@ -28,7 +28,7 @@ public class LocalRepository {
     }
 
 
-     public Single<List<User>> getAllUser(){
+     public LiveData<List<User>> getAllUser(){
         return userDao.getAllUser();
     }
 
