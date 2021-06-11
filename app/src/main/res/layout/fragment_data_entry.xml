@@ -54,6 +54,7 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/purple_200"
             android:text="Select Birthday "
+            android:drawableRight="@drawable/ic_baseline_calendar_today_24"
             android:textSize="24sp" />
 
         <TextView
@@ -63,7 +64,8 @@
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="Birthday selected"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:paddingHorizontal="40dp"/>
 
         <Button
             android:id="@+id/button_select_profile_pic"
@@ -88,7 +90,8 @@
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/teal_200"
             android:gravity="center"
-            android:text="save" />
+            android:text="save"
+            android:layout_marginBottom="20dp"/>
 
     </LinearLayout>
 

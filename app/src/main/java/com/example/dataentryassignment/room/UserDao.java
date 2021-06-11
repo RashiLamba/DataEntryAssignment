@@ -22,10 +22,8 @@ public interface UserDao {
     Completable addUser(User user);
 
 
-
     @Query("select * from userDatabase")
     LiveData<List<User>> getAllUser();
 
 
-//    DataSource.Factory<Integer, User> getAllUser();
 }
