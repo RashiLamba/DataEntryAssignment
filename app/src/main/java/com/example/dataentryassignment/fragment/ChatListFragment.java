@@ -30,7 +30,7 @@ public class ChatListFragment extends Fragment {
     List<User> currentUserList;
     FragmentViewModel fragmentViewModel;
 
-    boolean isFragmentActive = false;
+
 
 
     @Override
@@ -60,9 +60,8 @@ public class ChatListFragment extends Fragment {
         if(fragmentViewModel!=null){
             fragmentViewModel.getQueryString().observe(getViewLifecycleOwner(), new Observer<String>() {
                 @Override
-                public void onChanged(String s) {
-                    if (isFragmentActive)
-                        queryChatList(s);
+                public void onChanged(String query) {
+                        queryChatList(query);
                 }
             });
         }
@@ -76,7 +75,6 @@ public class ChatListFragment extends Fragment {
         fragmentViewModel.queriedUserList.observe(this, new Observer<PagedList<User>>() {
             @Override
             public void onChanged(PagedList<User> users) {
-
                 chatListRecyclerViewAdaptor.submitList(users);
             }
         });

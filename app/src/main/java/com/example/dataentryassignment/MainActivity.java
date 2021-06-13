@@ -1,5 +1,6 @@
 package com.example.dataentryassignment;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.viewpager.widget.ViewPager;
@@ -59,7 +60,17 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu, menu);
 
         MenuItem searchViewItem = menu.findItem(R.id.search_icon);
-        SearchView searchView = (SearchView) searchViewItem.getActionView();
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+
+        SearchView searchView = (SearchView) item.getActionView();
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -77,7 +88,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("TAG", "Inside onQueryTextChange: " + newText);
                 return false;
             }
-        });
-        return super.onCreateOptionsMenu(menu);
-    }
+
+
+    });
+        return super.onOptionsItemSelected(item);
+}
 }

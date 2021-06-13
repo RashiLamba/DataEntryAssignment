@@ -19,7 +19,7 @@ public interface UserDao {
     @Query("select * from userDatabase")
     DataSource.Factory<Integer, User> getAllUser();
 
-    @Query("select * from UserDatabase where name like :query or contactNumber like :query order by name desc")
+    @Query("select * from UserDatabase where name like :query or contactNumber like :query")
     DataSource.Factory<Integer,User> queryAllUser(String query);
 
 
