@@ -28,12 +28,13 @@ public class LocalRepository {
     }
 
 
-     public LiveData<List<User>> getAllUser(){
+    public DataSource.Factory<Integer,User> getAllUser(){
         return userDao.getAllUser();
     }
 
-
-
+    public DataSource.Factory queryAllUser(String query) {
+        return userDao.queryAllUser(query);
+    }
 }
 
 

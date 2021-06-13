@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +27,7 @@ public class ChatListFragment extends Fragment {
     RecyclerView recyclerViewChatList;
     RecyclerView.LayoutManager layoutManager;
     ChatListRecyclerViewAdaptor chatListRecyclerViewAdaptor;
-    ArrayList<User> userArrayList;
+    List<User> currentUserList;
     FragmentViewModel fragmentViewModel;
 
 
@@ -34,7 +35,7 @@ public class ChatListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentViewModel = new ViewModelProvider(this).get(FragmentViewModel.class);
-        userArrayList = new ArrayList<>();
+        currentUserList = new ArrayList<>();
 
 
     }
@@ -46,17 +47,40 @@ public class ChatListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat_list, container, false);
 
         init(view);
+        fragmentViewModel.init();
         observeForDbChanges();
+        observeQueryString();
 
         return view;
     }
 
-    private void observeForDbChanges(){
-        fragmentViewModel.getAllUsers().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
-            @Override
-            public void onChanged(List<User> userList) {
-                chatListRecyclerViewAdaptor.submitList(userList);
+    private void observeQueryString() {
+        if(fragmentViewModel!=null){
+//            fragmentViewModel.getQuery
+        }
+    }
 
+    private void queryChatList(String query){
+        query = "%" + query + "%";
+
+        fragmentViewModel.queriedUserList.observe(this, new Observer<PagedList<User>>() {
+            @Override
+            public void onChanged(PagedList<User> users) {
+
+                chatListRecyclerViewAdaptor.submitList(users);
+            }
+        });
+
+
+    }
+
+    private void observeForDbChanges() {
+
+        fragmentViewModel.userList.observe(getViewLifecycleOwner(), new Observer<PagedList<User>>() {
+            @Override
+            public void onChanged(PagedList<User> users) {
+                currentUserList = users.snapshot();
+                chatListRecyclerViewAdaptor.submitList(users);
             }
         });
 

@@ -7,6 +7,10 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.DataSource;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
+import androidx.paging.PagedListAdapter;
 
 import com.example.dataentryassignment.model.User;
 import com.example.dataentryassignment.repository.LocalRepository;
@@ -25,7 +29,10 @@ import io.reactivex.schedulers.Schedulers;
 
 public class FragmentViewModel extends AndroidViewModel {
 
-    public MutableLiveData<List<User>> userList;
+    public LiveData<PagedList<User>> userList;
+    public LiveData<PagedList<User>> queriedUserList;
+
+
     LocalRepository localRepository;
 
 
@@ -34,6 +41,21 @@ public class FragmentViewModel extends AndroidViewModel {
         localRepository = new LocalRepository(getApplication());
         userList = new MutableLiveData<>();
 
+    }
+
+    public void init(){
+        PagedList.Config config = (new PagedList.Config.Builder().setEnablePlaceholders(false))
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10).build();
+        userList = new LivePagedListBuilder<>(localRepository.getAllUser(), config).build();
+    }
+
+    public void queryInit(String query) {
+
+        PagedList.Config config = (new PagedList.Config.Builder()).setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10).build();
+        queriedUserList = new LivePagedListBuilder<>(localRepository.queryAllUser(query), config).build();
     }
 
 
@@ -63,7 +85,7 @@ public class FragmentViewModel extends AndroidViewModel {
 
     }
 
-    public LiveData<List<User>> getAllUsers() {
+    public DataSource.Factory<Integer, User> getAllUsers() {
         return localRepository.getAllUser();
 
     }

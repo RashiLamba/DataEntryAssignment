@@ -9,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.dataentryassignment.R;
 import com.example.dataentryassignment.model.User;
 
@@ -19,24 +22,29 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatListRecyclerViewAdaptor extends RecyclerView.Adapter<ChatListRecyclerViewAdaptor.holder> {
+public class ChatListRecyclerViewAdaptor extends PagedListAdapter< User ,ChatListRecyclerViewAdaptor.holder> {
 
 
     Context context;
     List<User> userArrayList;
 
+    public static DiffUtil.ItemCallback<User> DIFF_CALLBACK = new DiffUtil.ItemCallback<User>() {
+        @Override
+        public boolean areItemsTheSame(@NonNull @NotNull User oldItem, @NonNull @NotNull User newItem) {
+            return oldItem.get_id() == newItem.get_id();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull @NotNull User oldItem, @NonNull @NotNull User newItem) {
+            return oldItem.equals(newItem);
+        }
+    };
+
     public ChatListRecyclerViewAdaptor(Context context) {
+        super(DIFF_CALLBACK);
         this.context = context;
 
     }
-
-    public void submitList(List<User> userList){
-        this.userArrayList = userList;
-        notifyDataSetChanged();
-
-
-    }
-
 
     @NonNull
     @NotNull
@@ -49,12 +57,25 @@ public class ChatListRecyclerViewAdaptor extends RecyclerView.Adapter<ChatListRe
     @Override
     public void onBindViewHolder(@NonNull @NotNull ChatListRecyclerViewAdaptor.holder holder, int position) {
 
-        User user = userArrayList.get(position);
+//        User user = userArrayList.get(position);
+        User user = getItem(position);
         holder.textViewName.setText(user.getName());
         holder.textViewNumber1.setText(user.getContactNumber());
         holder.textViewNumber2.setText(user.getContactNumber2());
         holder.textViewNumber3.setText(user.getContactNumber3());
 
+        if (user.getProfilePic()!=null){
+            Glide.with(holder.imageViewProfilePic.getContext())
+                    .load(Uri.parse(user.getProfilePic()))
+                    .error(R.drawable.ic_baseline_person_24)
+                    .into(holder.imageViewProfilePic);
+        }
+        else {
+            Glide.with(holder.imageViewProfilePic.getContext())
+                    .load(R.drawable.ic_baseline_person_24)
+                    .error(R.drawable.ic_baseline_person_24)
+                    .into(holder.imageViewProfilePic);
+        }
 
 //        User user = getItem(position);
 //        holder.textViewName.setText(user.getName());
@@ -64,10 +85,10 @@ public class ChatListRecyclerViewAdaptor extends RecyclerView.Adapter<ChatListRe
 
     }
 
-    @Override
-    public int getItemCount() {
-        return userArrayList == null ? 0 : userArrayList.size();
-    }
+//    @Override
+//    public int getItemCount() {
+//        return userArrayList == null ? 0 : userArrayList.size();
+//    }
 
     class holder extends RecyclerView.ViewHolder {
 
