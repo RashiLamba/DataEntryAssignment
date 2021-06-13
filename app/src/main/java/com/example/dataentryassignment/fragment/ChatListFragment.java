@@ -30,6 +30,8 @@ public class ChatListFragment extends Fragment {
     List<User> currentUserList;
     FragmentViewModel fragmentViewModel;
 
+    boolean isFragmentActive = false;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,12 +58,20 @@ public class ChatListFragment extends Fragment {
 
     private void observeQueryString() {
         if(fragmentViewModel!=null){
-//            fragmentViewModel.getQuery
+            fragmentViewModel.getQueryString().observe(getViewLifecycleOwner(), new Observer<String>() {
+                @Override
+                public void onChanged(String s) {
+                    if (isFragmentActive)
+                        queryChatList(s);
+                }
+            });
         }
     }
 
     private void queryChatList(String query){
         query = "%" + query + "%";
+
+        fragmentViewModel.queryInit(query);
 
         fragmentViewModel.queriedUserList.observe(this, new Observer<PagedList<User>>() {
             @Override

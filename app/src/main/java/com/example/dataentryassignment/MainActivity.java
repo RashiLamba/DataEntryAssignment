@@ -5,11 +5,13 @@ import androidx.appcompat.widget.SearchView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.dataentryassignment.adaptor.ViewPagerAdaptor;
+import com.example.dataentryassignment.viewmodel.FragmentViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,45 +52,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-   /* @Override
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        MenuInflater inflaterSearch = getMenuInflater();
-        inflaterSearch.inflate(R.menu.menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.search_icon);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Search here! ");
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
 
-
-       *//*
-        Observable.create(new ObservableOnSubscribe<String>() {
+        MenuItem searchViewItem = menu.findItem(R.id.search_icon);
+        SearchView searchView = (SearchView) searchViewItem.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void subscribe(@NotNull ObservableEmitter<String> emitter) throws Exception {
-                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                    @Override
-                    public boolean onQueryTextSubmit(String query) {
-                        searchView.clearFocus();
-                        return false;
-                    }
+            public boolean onQueryTextSubmit(String query) {
+                searchView.clearFocus();
+                FragmentViewModel.setQueryString(query);
 
-                    @Override
-                    public boolean onQueryTextChange(String newText) {
-                        if (!emitter.isDisposed())
-                            emitter.onNext(newText);
-                        return false;
-                    }
-                });
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new io.reactivex.Observer<String>()){
-
+                Log.d("TAG", "Inside onQueryTextSubmit: " + query);
+                return false;
             }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                FragmentViewModel.setQueryString(newText);
+
+                Log.d("TAG", "Inside onQueryTextChange: " + newText);
+                return false;
+            }
+        });
         return super.onCreateOptionsMenu(menu);
-    };
-*//*
-
-
-}*/
+    }
 }

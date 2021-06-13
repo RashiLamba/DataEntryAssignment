@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.example.dataentryassignment.model.User;
 
-@androidx.room.Database(entities = {User.class},version = 1,exportSchema = false)
+@androidx.room.Database(entities = {User.class},version = 2,exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     public static Database instance;

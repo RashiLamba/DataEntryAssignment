@@ -1,5 +1,6 @@
 package com.example.dataentryassignment.viewmodel;
 
+import android.app.ActionBar;
 import android.app.Application;
 import android.util.Log;
 
@@ -41,6 +42,16 @@ public class FragmentViewModel extends AndroidViewModel {
         localRepository = new LocalRepository(getApplication());
         userList = new MutableLiveData<>();
 
+    }
+
+    private static MutableLiveData<String> queryString = new MutableLiveData<>();
+
+    public static void setQueryString(String query) {
+        queryString.setValue(query);
+    }
+
+    public LiveData<String> getQueryString() {
+        return queryString;
     }
 
     public void init(){
