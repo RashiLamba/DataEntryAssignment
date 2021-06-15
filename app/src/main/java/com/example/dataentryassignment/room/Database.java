@@ -18,6 +18,13 @@ public abstract class Database extends RoomDatabase {
 
     public static Database instance;
 
+//    static Migration migration = new Migration(1,2) {
+//        @Override
+//        public void migrate(@NonNull @NotNull SupportSQLiteDatabase database) {
+//            database.execSQL("alter table 'UserDatabse' add 'dateOfBirth' TEXT ");
+//        }
+//    };
+
 
     static Migration migration = new Migration(1,2) {
         @Override

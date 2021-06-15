@@ -13,8 +13,10 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import androidx.paging.PagedListAdapter;
 
+import com.example.dataentryassignment.model.Contact;
 import com.example.dataentryassignment.model.User;
 import com.example.dataentryassignment.repository.LocalRepository;
+import com.example.dataentryassignment.utils.SyncNativeContacts;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,6 +37,8 @@ public class FragmentViewModel extends AndroidViewModel {
 
 
     LocalRepository localRepository;
+
+    SyncNativeContacts syncNativeContacts;
 
 
     public FragmentViewModel(@NonNull @NotNull Application application) {
@@ -99,6 +103,34 @@ public class FragmentViewModel extends AndroidViewModel {
     public DataSource.Factory<Integer, User> getAllUsers() {
         return localRepository.getAllUser();
 
+    }
+
+
+
+
+    public void completeContactSync() {
+        syncNativeContacts = new SyncNativeContacts(getApplication());
+        syncNativeContacts.getContactArrayList()
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleObserver<List<Contact>>() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                        Log.e("TAG", "onSubscribe: Inside complete sync  "   );
+                    }
+
+                    @Override
+                    public void onSuccess(@NotNull List<Contact> contacts) {
+                        Log.e("TAG", "onSuccess: Inside complete sync"  );
+
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        Log.e("TAG", "onError: Inside complete sync error" +e.getMessage());
+
+
+                    }
+                });
     }
 }
 

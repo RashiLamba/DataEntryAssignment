@@ -3,8 +3,12 @@ package com.example.dataentryassignment;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,9 +33,11 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int READ_CONTACT_REQUEST_CODE = 100;
     ViewPager viewPager;
     TabLayout tabLayout;
     ViewPagerAdaptor viewPagerAdaptor;
+    FragmentViewModel fragmentViewModel;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -40,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        fragmentViewModel = ViewModelProviders.of(this).get(FragmentViewModel.class);
         initMainActivity();
     }
 
@@ -50,6 +56,26 @@ public class MainActivity extends AppCompatActivity {
         viewPagerAdaptor= new ViewPagerAdaptor(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdaptor);
         tabLayout.setupWithViewPager(viewPager);
+
+        checkPermissionSyncContacts();
+    }
+
+    private void checkPermissionSyncContacts() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS) !=
+                PackageManager.PERMISSION_GRANTED)
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACT_REQUEST_CODE);
+        else
+            syncContacts();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+    }
+
+    private void syncContacts() {
+        fragmentViewModel.completeContactSync();
     }
 
 
@@ -65,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
 
         SearchView searchView = (SearchView) item.getActionView();
 
