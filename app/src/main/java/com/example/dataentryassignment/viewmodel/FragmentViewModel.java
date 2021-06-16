@@ -110,7 +110,7 @@ public class FragmentViewModel extends AndroidViewModel {
 
     public void completeContactSync() {
         syncNativeContacts = new SyncNativeContacts(getApplication());
-        syncNativeContacts.getContactArrayList()
+        syncNativeContacts.getContactArrayList().doAfterSuccess(this::addContactListToDataBase)
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleObserver<List<Contact>>() {
                     @Override
@@ -122,6 +122,7 @@ public class FragmentViewModel extends AndroidViewModel {
                     public void onSuccess(@NotNull List<Contact> contacts) {
                         Log.e("TAG", "onSuccess: Inside complete sync"  );
 
+
                     }
 
                     @Override
@@ -131,6 +132,31 @@ public class FragmentViewModel extends AndroidViewModel {
 
                     }
                 });
+    }
+
+
+
+    private void addContactListToDataBase(List<Contact> contactList) {
+        localRepository.addListOfContact(contactList)
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                        Log.d("TAG","Inside of addContactListToDatabase in SyncNativeContact");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("TAG","Inside of onCompleteListOfDatabase in SyncNativeContact");
+
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        Log.d("TAG","Inside of onErrorListOfDatabase in SyncNativeContact" +e.getMessage());
+
+                    }
+                });
+
     }
 }
 

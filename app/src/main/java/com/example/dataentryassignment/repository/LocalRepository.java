@@ -5,7 +5,9 @@ import android.content.Context;
 import androidx.lifecycle.LiveData;
 import androidx.paging.DataSource;
 
+import com.example.dataentryassignment.model.Contact;
 import com.example.dataentryassignment.model.User;
+import com.example.dataentryassignment.room.ContactDao;
 import com.example.dataentryassignment.room.Database;
 import com.example.dataentryassignment.room.UserDao;
 
@@ -16,11 +18,12 @@ import io.reactivex.Single;
 
 public class LocalRepository {
     private UserDao userDao;
+    private ContactDao contactDao;
 
 
     public LocalRepository(Context context){
         userDao = Database.getInstance(context).userDao();
-
+        contactDao = Database.getInstance(context).contactDao();
     }
 
     public Completable addUser(User user){
@@ -35,6 +38,15 @@ public class LocalRepository {
     public DataSource.Factory queryAllUser(String query) {
         return userDao.queryAllUser(query);
     }
+
+    public Completable addListOfContact(List<Contact> contactList) {
+        return contactDao.addListOfContact(contactList);
+    }
+
+
+
+
+
 }
 
 

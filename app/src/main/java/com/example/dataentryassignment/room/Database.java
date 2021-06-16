@@ -9,11 +9,12 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.dataentryassignment.model.Contact;
 import com.example.dataentryassignment.model.User;
 
 import org.jetbrains.annotations.NotNull;
 
-@androidx.room.Database(entities = {User.class},version = 3,exportSchema = false)
+@androidx.room.Database(entities = {User.class, Contact.class},version = 3,exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
     public static Database instance;
@@ -48,4 +49,6 @@ public abstract class Database extends RoomDatabase {
 
 
     public abstract UserDao userDao();
+
+    public abstract ContactDao contactDao();
 }

@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.dataentryassignment.adaptor.ViewPagerAdaptor;
 import com.example.dataentryassignment.viewmodel.FragmentViewModel;
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdaptor viewPagerAdaptor;
     FragmentViewModel fragmentViewModel;
 
-    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+//    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+
 
 
     @Override
@@ -71,7 +73,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull @NotNull String[] permissions, @NonNull @NotNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
+        if (requestCode == READ_CONTACT_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                syncContacts();
+            else
+                Toast.makeText(this, "Contact Sync failed. Please grant contacts permission", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void syncContacts() {
@@ -86,8 +93,6 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu, menu);
 
         MenuItem searchViewItem = menu.findItem(R.id.search_icon);
-
-
         return super.onCreateOptionsMenu(menu);
     }
 

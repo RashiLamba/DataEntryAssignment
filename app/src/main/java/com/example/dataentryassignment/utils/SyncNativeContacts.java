@@ -17,12 +17,10 @@ import io.reactivex.Single;
 public class SyncNativeContacts {
 
     Context context;
-    LocalRepository localRepository;
 
 
     public SyncNativeContacts(Context context){
         this.context = context;
-        localRepository = new LocalRepository(context);
     }
 
 
@@ -35,22 +33,22 @@ public class SyncNativeContacts {
                     null,null,null,null);
 
             if ((cursor != null ? cursor.getCount(): 0 ) > 0) {
-                while (cursor.moveToNext()){
+                while (cursor.moveToNext()) {
                     String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                    Log.d("TAG", "Id is: "+id);
+                    Log.d("TAG", "Id is: " + id);
                     String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                    Log.d("TAG","Name is: "+name);
+                    Log.d("TAG", "Name is: " + name);
 
 
                     List<String> numberList = new ArrayList<>();
 
-                    if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0 ){
+                    if (cursor.getInt(cursor.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)) > 0) {
 
                         Cursor phoneCursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                                null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?" ,new String[]{id},
+                                null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", new String[]{id},
                                 null);
 
-                        while (phoneCursor.moveToNext()){
+                        while (phoneCursor.moveToNext()) {
                             String number = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                             numberList.add(number);
                             Log.d("TAG", "Name is: " + name);
@@ -59,10 +57,15 @@ public class SyncNativeContacts {
                         }
                         phoneCursor.close();
                     }
+
+                    Contact addToDB = new Contact(id, name, numberList);
+                    contactList.add(addToDB);
+
                 }
-                    cursor.close();
-                Log.d("TAG", "Total Count: " + count);
             }
+            if (cursor != null)
+                cursor.close();
+            Log.d("TAG", "Total Count: " + count);
             return contactList;
         });
     }

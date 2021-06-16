@@ -1,5 +1,7 @@
 package com.example.dataentryassignment.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverter;
@@ -10,10 +12,13 @@ import com.example.dataentryassignment.room.ListConvertor;
 import java.io.Serializable;
 import java.util.List;
 
+import io.reactivex.Completable;
+
 @Entity(tableName = "ContactDatabase")
 public class Contact implements Serializable {
 
     @PrimaryKey
+    @NonNull
     private String _id;
     private String name;
 
@@ -24,6 +29,10 @@ public class Contact implements Serializable {
         this._id = _id;
         this.name = name;
         this.number = number;
+    }
+
+    public Contact(){
+
     }
 
     public String get_id() {
@@ -49,4 +58,5 @@ public class Contact implements Serializable {
     public void setNumber(List<String> number) {
         this.number = number;
     }
+
 }
