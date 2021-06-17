@@ -11,6 +11,7 @@ import com.example.dataentryassignment.room.ListConvertor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 
 import io.reactivex.Completable;
 
@@ -59,4 +60,18 @@ public class Contact implements Serializable {
         this.number = number;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contact contact = (Contact) o;
+        return _id.equals(contact._id) &&
+                Objects.equals(name, contact.name) &&
+                Objects.equals(number, contact.number);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(_id, name, number);
+    }
 }

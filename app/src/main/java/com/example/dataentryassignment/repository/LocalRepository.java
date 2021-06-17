@@ -43,7 +43,9 @@ public class LocalRepository {
         return contactDao.addListOfContact(contactList);
     }
 
-
+    public DataSource.Factory<Integer,Contact> getAllContact(){
+        return contactDao.getAllContacts();
+    }
 
 
 
