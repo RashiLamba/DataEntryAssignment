@@ -33,6 +33,8 @@ public class LocalRepository {
 
     public Completable deleteUser(User user) { return userDao.deleteUser(user);}
 
+    public Completable updateUser(User user) { return userDao.updateUser(user);}
+
 
     public DataSource.Factory<Integer,User> getAllUser(){
         return userDao.getAllUser();

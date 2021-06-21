@@ -53,6 +53,8 @@ public class ChatListFragment extends Fragment implements ItemClickListener {
         fragmentViewModel = new ViewModelProvider(this).get(FragmentViewModel.class);
         currentUserList = new ArrayList<>();
         deleteUserList = new ArrayList<>();
+        setHasOptionsMenu(true);
+
 
 
     }

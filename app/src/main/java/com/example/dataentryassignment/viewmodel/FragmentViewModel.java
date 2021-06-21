@@ -153,6 +153,31 @@ public class FragmentViewModel extends AndroidViewModel {
                 });
     }
 
+    public void updateUser(User user){
+        localRepository.updateUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                        Log.d("TAG", "Inside onSubscribe of updateUser in ViewModel");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("TAG", "Inside onComplete of updateUser in ViewModel");
+
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        Log.d("TAG", "Inside onError of updateUser in ViewModel");
+
+                    }
+                });
+
+    }
+
     public DataSource.Factory<Integer, User> getAllUsers() {
         return localRepository.getAllUser();
 

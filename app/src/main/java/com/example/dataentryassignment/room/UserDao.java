@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.dataentryassignment.model.User;
 
@@ -18,6 +19,9 @@ public interface UserDao {
 
     @Delete
     Completable deleteUser(User user);
+
+    @Update
+    Completable updateUser(User user);
 
 
     @Query("select * from userDatabase")
