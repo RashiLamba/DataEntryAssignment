@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.lifecycle.LiveData;
 import androidx.paging.DataSource;
+import androidx.room.Query;
 
 import com.example.dataentryassignment.model.Contact;
 import com.example.dataentryassignment.model.User;
@@ -30,6 +31,8 @@ public class LocalRepository {
         return userDao.addUser(user);
     }
 
+    public Completable deleteUser(User user) { return userDao.deleteUser(user);}
+
 
     public DataSource.Factory<Integer,User> getAllUser(){
         return userDao.getAllUser();
@@ -45,6 +48,10 @@ public class LocalRepository {
 
     public DataSource.Factory<Integer,Contact> getAllContact(){
         return contactDao.getAllContacts();
+    }
+
+    public DataSource.Factory<Integer,Contact> getQueryContact(String query){
+        return contactDao.getQueryContact(query);
     }
 
 

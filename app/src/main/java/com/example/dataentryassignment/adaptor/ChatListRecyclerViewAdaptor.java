@@ -2,6 +2,7 @@ package com.example.dataentryassignment.adaptor;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +15,19 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.dataentryassignment.interfaces.ItemClickListener;
 import com.example.dataentryassignment.R;
 import com.example.dataentryassignment.model.User;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChatListRecyclerViewAdaptor extends PagedListAdapter< User ,ChatListRecyclerViewAdaptor.holder> {
 
 
     Context context;
+    ItemClickListener itemClickListener;
     List<User> userArrayList;
 
     public static DiffUtil.ItemCallback<User> DIFF_CALLBACK = new DiffUtil.ItemCallback<User>() {
@@ -40,9 +42,9 @@ public class ChatListRecyclerViewAdaptor extends PagedListAdapter< User ,ChatLis
         }
     };
 
-    public ChatListRecyclerViewAdaptor(Context context) {
+    public ChatListRecyclerViewAdaptor(ItemClickListener itemClickListener) {
         super(DIFF_CALLBACK);
-        this.context = context;
+        this.itemClickListener = itemClickListener;
 
     }
 
@@ -90,7 +92,7 @@ public class ChatListRecyclerViewAdaptor extends PagedListAdapter< User ,ChatLis
 //        return userArrayList == null ? 0 : userArrayList.size();
 //    }
 
-    class holder extends RecyclerView.ViewHolder {
+    class holder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
 
         ImageView imageViewProfilePic;
         TextView textViewName, textViewNumber1, textViewNumber2 ,textViewNumber3 ;
@@ -103,6 +105,26 @@ public class ChatListRecyclerViewAdaptor extends PagedListAdapter< User ,ChatLis
             textViewNumber2 = itemView.findViewById(R.id.text_view_number2);
             textViewNumber3 = itemView.findViewById(R.id.text_view_number3);
 
+
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+
+
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.d("TAG","onClick in chatListAdapter"+ v.getId());
+            if (itemClickListener!= null)
+                itemClickListener.onItemClicked(v,getItem(getAdapterPosition()));
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            Log.d("TAG","onLongClicked in chatListAdapter"+v.getId());
+            if (itemClickListener!=null)
+                itemClickListener.onItemLongClicked(v,getItem(getAdapterPosition()),getAdapterPosition());
+            return true;
         }
     }
 }

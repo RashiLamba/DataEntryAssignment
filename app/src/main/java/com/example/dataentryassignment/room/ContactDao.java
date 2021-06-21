@@ -21,6 +21,8 @@ public interface ContactDao {
     @Query("select * from ContactDatabase order by name asc")
     DataSource.Factory<Integer,Contact> getAllContacts();
 
+    @Query("select * from contactdatabase where name like :query or number like :query order by name asc")
+    DataSource.Factory<Integer,Contact> getQueryContact(String query);
 
 
 }

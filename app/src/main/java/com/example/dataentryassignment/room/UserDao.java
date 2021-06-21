@@ -2,6 +2,7 @@ package com.example.dataentryassignment.room;
 
 import androidx.paging.DataSource;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -14,6 +15,9 @@ public interface UserDao {
 
     @Insert
     Completable addUser(User user);
+
+    @Delete
+    Completable deleteUser(User user);
 
 
     @Query("select * from userDatabase")

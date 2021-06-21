@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.GenericLifecycleObserver;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.viewpager.widget.ViewPager;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
@@ -251,10 +252,39 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
 
 
             private void saveButtonClicked() {
+
+        String userName = editTextUserName.getText().toString();
+        String contactNumber =editTextContactNumber.getText().toString();
+        if (userName.equals("") || contactNumber.equals("")){
+            Toast.makeText(getContext(), "Please enter all details", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
                 User user = new User(editTextUserName.getText().toString(),editTextContactNumber.getText().toString(),
                         editTextContactNumber2.getText().toString(),editTextContactNumber3.getText().toString(),profilePicPath,
                         textViewBirthday.getText().toString());
                 fragmentViewModel.addUser(user);
+
+                clearInputFields();
+
+                changeTabChatList();
             }
+
+    private void changeTabChatList() {
+        ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
+        viewPager.setCurrentItem(1,true);
+    }
+
+    private void clearInputFields() {
+        editTextUserName.setText("");
+        editTextContactNumber.setText("");
+        editTextContactNumber2.setText("");
+        editTextContactNumber3.setText("");
+        textViewBirthday.setText("");
+        imageViewProfilePic.setImageDrawable(null);
+//        imageViewProfilePic.setImageDrawable(R.drawable.);
+
+    }
 
 }

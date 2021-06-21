@@ -3,6 +3,7 @@ package com.example.dataentryassignment.viewmodel;
 import android.app.ActionBar;
 import android.app.Application;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -35,6 +36,7 @@ public class FragmentViewModel extends AndroidViewModel {
     public LiveData<PagedList<User>> userList;
     public LiveData<PagedList<User>> queriedUserList;
     public LiveData<PagedList<Contact>> contactList;
+    public LiveData<PagedList<Contact>> queryContactList;
 
 
     LocalRepository localRepository;
@@ -59,6 +61,14 @@ public class FragmentViewModel extends AndroidViewModel {
         return queryString;
     }
 
+    public static MutableLiveData<Boolean> isMultiSelectOn = new MutableLiveData<>();
+
+    public void setIsMultiSelect(boolean isMultiSelect){
+        isMultiSelectOn.postValue(isMultiSelect);
+    }
+
+    public static LiveData<Boolean> getIsMultiSelectOn(){ return isMultiSelectOn;}
+
     public void init(){
         PagedList.Config config = (new PagedList.Config.Builder().setEnablePlaceholders(false))
                 .setInitialLoadSizeHint(10)
@@ -81,6 +91,15 @@ public class FragmentViewModel extends AndroidViewModel {
         contactList = new LivePagedListBuilder<>(localRepository.getAllContact(),config).build();
 
     }
+
+    public void queryContactInit(String query){
+        PagedList.Config config = (new PagedList.Config.Builder().setEnablePlaceholders(false))
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10).build();
+        queryContactList = new LivePagedListBuilder<>(localRepository.getQueryContact(query),config).build();
+    }
+
+
 
 
     public void addUser(User user) {
@@ -105,8 +124,33 @@ public class FragmentViewModel extends AndroidViewModel {
 
                     }
                 });
+    }
 
 
+    public void deleteUser(User user){
+        localRepository.deleteUser(user)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NotNull Disposable d) {
+                        Log.d("TAG", "Inside onSubscribe of deleteUser in ViewModel");
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.d("TAG", "Inside onComplete of deleteUser in ViewModel");
+                        isMultiSelectOn.postValue(false);
+
+                    }
+
+                    @Override
+                    public void onError(@NotNull Throwable e) {
+                        Log.d("TAG", "Inside onError of deleteUser in ViewModel" + e.getMessage());
+
+                    }
+                });
     }
 
     public DataSource.Factory<Integer, User> getAllUsers() {

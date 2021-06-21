@@ -14,11 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.dataentryassignment.R;
+import com.example.dataentryassignment.interfaces.ContactItemClickListener;
 import com.example.dataentryassignment.model.Contact;
 
 import org.jetbrains.annotations.NotNull;
 
 public class ContactListRecyclerViewAdaptor extends PagedListAdapter<Contact, ContactListRecyclerViewAdaptor.holder> {
+
+
+    ContactItemClickListener contactItemClickListener;
 
     public static DiffUtil.ItemCallback<Contact> DIFF_CALLBACK = new DiffUtil.ItemCallback<Contact>() {
         @Override
@@ -59,7 +63,7 @@ public class ContactListRecyclerViewAdaptor extends PagedListAdapter<Contact, Co
 
     }
 
-    class holder extends RecyclerView.ViewHolder{
+    class holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView textViewName,textViewNumber,textViewNumber2,textViewNumber3;
         ImageView imageViewProfilePic;
 
@@ -71,6 +75,13 @@ public class ContactListRecyclerViewAdaptor extends PagedListAdapter<Contact, Co
             textViewNumber3 = itemView.findViewById(R.id.text_view_number3);
             imageViewProfilePic = itemView.findViewById(R.id.image_view_profile_pic);
 
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (contactItemClickListener != null)
+                contactItemClickListener.onItemClicked(v, getItem(getAdapterPosition()));
         }
     }
 

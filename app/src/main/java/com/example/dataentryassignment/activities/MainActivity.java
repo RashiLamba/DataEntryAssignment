@@ -1,9 +1,10 @@
-package com.example.dataentryassignment;
+package com.example.dataentryassignment.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.dataentryassignment.R;
 import com.example.dataentryassignment.adaptor.ViewPagerAdaptor;
 import com.example.dataentryassignment.viewmodel.FragmentViewModel;
 import com.google.android.material.tabs.TabLayout;
@@ -92,15 +94,11 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
 
+        setMenu(menu);
         MenuItem searchViewItem = menu.findItem(R.id.search_icon);
-        return super.onCreateOptionsMenu(menu);
-    }
 
+        SearchView searchView = (SearchView) searchViewItem.getActionView();
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        SearchView searchView = (SearchView) item.getActionView();
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -121,7 +119,54 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-    });
-        return super.onOptionsItemSelected(item);
-}
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//
+//        SearchView searchView = (SearchView) item.getActionView();
+//
+//
+//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                searchView.clearFocus();
+//                FragmentViewModel.setQueryString(query);
+//
+//                Log.d("TAG", "Inside onQueryTextSubmit: " + query);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                FragmentViewModel.setQueryString(newText);
+//
+//                Log.d("TAG", "Inside onQueryTextChange: " + newText);
+//                return false;
+//            }
+//
+//
+//        });
+//        return super.onOptionsItemSelected(item);
+//    }
+
+    public void setMenu(Menu menu){
+        FragmentViewModel.getIsMultiSelectOn().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if (aBoolean){
+                    menu.findItem(R.id.multi_select_delete).setVisible(true);
+                    menu.findItem(R.id.search_icon).setVisible(false);
+                }
+                else {
+                    menu.findItem(R.id.search_icon).setVisible(true);
+                    menu.findItem(R.id.multi_select_delete).setVisible(false);
+                }
+            }
+        });
+    }
+
 }
