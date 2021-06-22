@@ -54,9 +54,13 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
     ImageView imageViewProfilePic;
     String profilePicPath;
 
+    boolean isEditInfoActivity;
+
+    User user;
 
     private final int REQUEST_CODE_GALLERY = 101;
     private final int REQUEST_CODE_CAMERA = 100;
+
 
 
     @Override
@@ -75,9 +79,33 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
 
         init(view);
         fragmentViewModel.init();
+
+
+        if (getArguments()!= null){
+            isEditInfoActivity = getArguments().getBoolean("IsEditInfoActivity",false);
+        } else {
+            isEditInfoActivity = false;
+        }
+
+        if (isEditInfoActivity){
+            displayEditInfo((User) getArguments().getSerializable("User"));
+        }
         return view;
 
 //        fragmentViewModel.init();
+    }
+
+    private void displayEditInfo(User user) {
+        editTextUserName.setText(user.getName());
+        editTextContactNumber.setText(user.getContactNumber());
+
+        String birthDate = "Birthday selected is :" + user.getDateOfBirth();
+        textViewBirthday.setText(birthDate);
+
+//        updateProfilePic(user.getProfilePic());
+
+
+        this.user = user;
     }
 
     private void init(View view) {
@@ -253,22 +281,30 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
 
             private void saveButtonClicked() {
 
-        String userName = editTextUserName.getText().toString();
-        String contactNumber =editTextContactNumber.getText().toString();
-        if (userName.equals("") || contactNumber.equals("")){
-            Toast.makeText(getContext(), "Please enter all details", Toast.LENGTH_SHORT).show();
-            return;
-        }
+                String userName = editTextUserName.getText().toString();
+                String contactNumber =editTextContactNumber.getText().toString();
+                if (userName.equals("") || contactNumber.equals("")){
+                    Toast.makeText(getContext(), "Please enter all details", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-
+                if (!isEditInfoActivity) {
                 User user = new User(editTextUserName.getText().toString(),editTextContactNumber.getText().toString(),
                         editTextContactNumber2.getText().toString(),editTextContactNumber3.getText().toString(),profilePicPath,
                         textViewBirthday.getText().toString());
                 fragmentViewModel.addUser(user);
+                }else{
+                    user.setName(userName);
+                    user.setContactNumber(contactNumber);
+                    fragmentViewModel.updateUser(user);
+                }
 
                 clearInputFields();
 
+                if (!isEditInfoActivity)
                 changeTabChatList();
+                else
+                    getActivity().finish();
             }
 
     private void changeTabChatList() {
