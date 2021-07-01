@@ -128,6 +128,8 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
 
     }
 
+
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -283,10 +285,17 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
 
                 String userName = editTextUserName.getText().toString();
                 String contactNumber =editTextContactNumber.getText().toString();
+                String contactNumber3 = editTextContactNumber3.getText().toString();
+                String contactNumber2 = editTextContactNumber2.getText().toString();
                 if (userName.equals("") || contactNumber.equals("")){
                     Toast.makeText(getContext(), "Please enter all details", Toast.LENGTH_SHORT).show();
                     return;
+                }else if(contactNumber.equals(contactNumber2) || contactNumber2.equals(contactNumber3)||contactNumber.equals(contactNumber3)){
+                    Toast.makeText(getContext(), "Please enter different Number", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+
 
                 if (!isEditInfoActivity) {
                 User user = new User(editTextUserName.getText().toString(),editTextContactNumber.getText().toString(),
@@ -300,12 +309,22 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
                 }
 
                 clearInputFields();
+//                checkDifferentNumber();
 
                 if (!isEditInfoActivity)
                 changeTabChatList();
                 else
                     getActivity().finish();
             }
+
+//    private void checkDifferentNumber() {
+//        if(editTextContactNumber.equals(editTextContactNumber2)||editTextContactNumber2.equals(editTextContactNumber3)||
+//                editTextContactNumber.equals(editTextContactNumber3)){
+//            Toast.makeText(getContext(), "Please enter different number", Toast.LENGTH_SHORT).show();
+//        }
+//        clearInputFields();
+//    }
+
 
     private void changeTabChatList() {
         ViewPager viewPager = getActivity().findViewById(R.id.view_pager);
@@ -322,5 +341,7 @@ public class DataEntryFragment extends Fragment implements View.OnClickListener 
 //        imageViewProfilePic.setImageDrawable(R.drawable.);
 
     }
+
+
 
 }
